@@ -7,7 +7,7 @@ when defined(useFuthark) or defined(useFutharkForWhisper):
 
   importc:
     outputPath currentSourcePath.parentDir / "whisper_generated.nim"
-    path "./whisper/include"
+    path "./whisper"
     "whisper.h"
 else:
   include "whisper_generated.nim"
