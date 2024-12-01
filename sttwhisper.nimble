@@ -14,7 +14,7 @@ requires "futhark"
 requires "sdl2"
 
 task test, "Test":
-  exec "nim c -r src/sttwhisper"
+  exec "nim c -r -d:release src/sttwhisper"
 
 task gen, "Gen":
   exec "nim c -r -d:useFutharkForWhisper src/sttwhisper"

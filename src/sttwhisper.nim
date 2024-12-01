@@ -16,7 +16,7 @@ import std/lenientops
 import ./sdlaudio
 
 proc main =
-  let threads = 1'i32
+  let threads = 2'i32
   let stepMs = 3000'i32
   let lengthMs = 10000'i32
   let keepMs = 200'i32
@@ -26,7 +26,10 @@ proc main =
   let vadThold = 0.6'f32
   let freqThold = 100.0'f32
   let lang = "en"
-  let model = "./src/models/ggml-base.en.bin"
+  #let model = "./src/models/ggml-base.en.bin"
+  let model = "./src/models/ggml-base.en-q5_0.bin"
+  #let model = "./src/models/ggml-large-v3-turbo-q5_0.bin"
+  #let model = "./src/models/ggml-model-whisper-small-q5_1.bin"
   let nSamplesStep = int32(0.001'f32 * stepMs * WHISPER_SAMPLE_RATE)
   let nSamplesLen = int32(0.001'f32 * lengthMs * WHISPER_SAMPLE_RATE)
   let nSamplesKeep = int32(0.001'f32 * keepMs * WHISPER_SAMPLE_RATE)
@@ -75,7 +78,7 @@ proc main =
         if pcmf32_new.len >= n_samples_step:
           audio.clear()
           break
-        sleep(1)
+        sleep(1000)
       let n_samples_new = pcmf32_new.len
       let n_samples_take = min(pcmf32_old.len, max(0, n_samples_keep + n_samples_len - n_samples_new))
       pcmf32 = newSeq[float32](n_samples_new + n_samples_take)

@@ -1,4 +1,5 @@
-import sdl2, sdl2.audio, sequtils
+import std/[sequtils, locks]
+import pkg/[sdl2, sdl2.audio]
 
 type
   AudioAsync* = object
@@ -9,6 +10,7 @@ type
     m_audio: seq[float32]
     m_audio_pos: int
     m_audio_len: int
+    m_mutex: Lock
 
 proc initAudioAsync*(len_ms: int): AudioAsync =
   result = AudioAsync(
@@ -18,41 +20,44 @@ proc initAudioAsync*(len_ms: int): AudioAsync =
     m_sample_rate: 0,
     m_audio: @[],
     m_audio_pos: 0,
-    m_audio_len: 0
+    m_audio_len: 0,
+    m_mutex: Lock()
   )
+  initLock(result.m_mutex)
 
 # Destructor
 proc closeAudioAsync*(audio: var AudioAsync) =
   if audio.m_dev_id_in != 0:
     closeAudioDevice(audio.m_dev_id_in)
 
-proc callback(userdata: pointer, stream: ptr uint8, length: cint) {.cdecl.} =
+proc callback(userdata: pointer, stream: ptr uint8, length: cint) {.cdecl, gcsafe, raises: [].} =
   let audio = cast[ptr AudioAsync](userdata)
-  if not audio[].m_running:
+  #echo "callback"
+  if not audio.m_running:
     return
 
-  var stream = stream
-  var n_samples = length div sizeof(float32)
-  if n_samples > audio[].m_audio.len:
-    n_samples = audio[].m_audio.len
-    stream = cast[ptr uint8](cast[int](stream) + (length - n_samples * sizeof(float32)))
+  withLock audio.m_mutex:
+    var stream = stream
+    var n_samples = length div sizeof(float32)
+    if n_samples > audio.m_audio.len:
+      n_samples = audio.m_audio.len
+      stream = cast[ptr uint8](cast[int](stream) + (length - n_samples * sizeof(float32)))
 
-  if audio[].m_audio_pos + n_samples > audio[].m_audio.len:
-    let n0 = audio[].m_audio.len - audio[].m_audio_pos
-    copyMem(addr audio[].m_audio[audio[].m_audio_pos], stream, n0 * sizeof(float32))
-    copyMem(
-      addr audio[].m_audio[0],
-      cast[ptr uint8](cast[int](stream) + n0 * sizeof(float32)), (n_samples - n0) * sizeof(float32)
-    )
-    audio[].m_audio_pos = (audio[].m_audio_pos + n_samples) mod audio[].m_audio.len
-    audio[].m_audio_len = audio[].m_audio.len
-  else:
-    copyMem(addr audio[].m_audio[audio[].m_audio_pos], stream, n_samples * sizeof(float32))
-    audio[].m_audio_pos = (audio[].m_audio_pos + n_samples) mod audio[].m_audio.len
-    audio[].m_audio_len = min(audio[].m_audio_len + n_samples, audio[].m_audio.len)
+    if audio.m_audio_pos + n_samples > audio.m_audio.len:
+      let n0 = audio.m_audio.len - audio.m_audio_pos
+      copyMem(addr audio.m_audio[audio.m_audio_pos], stream, n0 * sizeof(float32))
+      copyMem(
+        addr audio.m_audio[0],
+        cast[ptr uint8](cast[int](stream) + n0 * sizeof(float32)), (n_samples - n0) * sizeof(float32)
+      )
+      audio.m_audio_pos = (audio.m_audio_pos + n_samples) mod audio.m_audio.len
+      audio.m_audio_len = audio.m_audio.len
+    else:
+      copyMem(addr audio.m_audio[audio.m_audio_pos], stream, n_samples * sizeof(float32))
+      audio.m_audio_pos = (audio.m_audio_pos + n_samples) mod audio.m_audio.len
+      audio.m_audio_len = min(audio.m_audio_len + n_samples, audio.m_audio.len)
 
 proc init*(audio: var AudioAsync, capture_id: int, sample_rate: int32): bool =
-
   if init(INIT_AUDIO) != SdlSuccess:
     echo "Couldn't initialize SDL: %s\n", getError()
     return false
@@ -70,7 +75,7 @@ proc init*(audio: var AudioAsync, capture_id: int, sample_rate: int32): bool =
   captureSpecRequested.channels = 1
   captureSpecRequested.samples = 1024
   captureSpecRequested.callback = callback
-  captureSpecRequested.userdata = cast[pointer](addr audio)
+  captureSpecRequested.userdata = addr audio
 
   if capture_id >= 0:
     echo "Attempting to open capture device ", capture_id, ": '", $getAudioDeviceName(capture_id.cint, true.cint), "'..."
@@ -83,7 +88,6 @@ proc init*(audio: var AudioAsync, capture_id: int, sample_rate: int32): bool =
 
   if audio.m_dev_id_in == 0:
     echo "Couldn't open an audio device for capture: ", $getError()
-    audio.m_dev_id_in = 0
     return false
   else:
     echo "Obtained spec for input device (SDL Id = ", audio.m_dev_id_in, "):"
@@ -133,33 +137,36 @@ proc clear*(audio: var AudioAsync): bool {.discardable.} =
     return false
 
   # Clear the audio buffer
-  audio.m_audio_pos = 0
-  audio.m_audio_len = 0
+  withLock audio.m_mutex:
+    audio.m_audio_pos = 0
+    audio.m_audio_len = 0
   return true
 
 proc get*(audio: var AudioAsync, ms: int): seq[float32] =
   if audio.m_dev_id_in == 0 or not audio.m_running:
     echo "No audio device or not running!"
     return @[]
+  
+  withLock audio.m_mutex:
+    var n_samples = (audio.m_sample_rate * ms) div 1000
+    if n_samples > audio.m_audio_len:
+      n_samples = audio.m_audio_len
 
-  var n_samples = (audio.m_sample_rate * ms) div 1000
-  if n_samples > audio.m_audio_len:
-    n_samples = audio.m_audio_len
+    result.setLen(n_samples)
 
-  result.setLen(n_samples)
-  #if result.len == 0:
-  #  return
-  #echo len(audio.m_audio)
-  var s0 = audio.m_audio_pos - n_samples
-  if s0 < 0:
-    s0 += audio.m_audio.len
+    var s0 = audio.m_audio_pos - n_samples
+    if s0 < 0:
+      s0 += audio.m_audio.len
 
-  if s0 + n_samples > audio.m_audio.len:
-    let n0 = audio.m_audio.len - s0
-    copyMem(addr result[0], addr audio.m_audio[s0], n0 * sizeof(float32))
-    copyMem(addr result[n0], addr audio.m_audio[0], (n_samples - n0) * sizeof(float32))
-  else:
-    copyMem(addr result[0], addr audio.m_audio[s0], n_samples * sizeof(float32))
+    if s0 + n_samples > audio.m_audio.len:
+      let n0 = audio.m_audio.len - s0
+      copyMem(addr result[0], addr audio.m_audio[s0], n0 * sizeof(float32))
+      copyMem(addr result[n0], addr audio.m_audio[0], (n_samples - n0) * sizeof(float32))
+    elif n_samples > 0:
+      copyMem(addr result[0], addr audio.m_audio[s0], n_samples * sizeof(float32))
+    else:
+      # if I reconnect my mic I get samples again
+      echo "no samples"
 
 # Poll SDL events
 proc sdlPollEvents*(): bool =
