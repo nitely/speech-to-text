@@ -1,0 +1,6 @@
+switch("passC", "-lstdc++")
+switch("passL", "-lstdc++")
+switch("passC", "-std=c++11")
+switch("passL", "-lm")
+switch("passC", "-fopenmp")
+switch("passL", "-lopenblas -fopenmp")
