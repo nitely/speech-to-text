@@ -211,32 +211,55 @@ proc reset(dtr: var Detector) =
 proc setThreshold(dtr: var Detector, val: float32) =
   dtr.cfg.threshold = val
 
-let cfg = newDetectorConfig(
-  modelPath = "./src/models/silero_vad.onnx",
-  sampleRate = 16000,
-  threshold = 0.5,
-  minSilenceDurationMs = 0,
-  speechPadMs = 0,
-  logLevel = ORT_LOGGING_LEVEL_WARNING
-)
-var dtr = initDetector(cfg)
+when isMainModule:
+  func toFloat32(x: array[4, uint8]): float32 =
+      result = cast[float32](x)
 
-func toFloat32(x: array[0..3, char]): float32 =
-    result = cast[float32](x)
+  proc readSamples(s: string): seq[float32] =
+    let t = readFile(s)
+    result = newSeq[float32]()
+    var i = 0
+    while i < t.len:
+      result.add [t[i+0].uint8, t[i+1].uint8, t[i+2].uint8, t[i+3].uint8].toFloat32
+      i += 4
 
-proc readSamples(s: string): seq[float32] =
-  let txt = readFile(s)
-  result = newSeq[float32]()
-  var i = 0
-  while i < txt.len:
-    #result.add [(txt[0].uint8+1).char, txt[1], txt[2], txt[3]].toFloat32
-    result.add [txt[0], txt[1], txt[2], txt[3]].toFloat32
-    i += 4
+  let cfg = newDetectorConfig(
+    modelPath = "./src/models/silero_vad.onnx",
+    sampleRate = 16000,
+    threshold = 0.5,
+    minSilenceDurationMs = 0,
+    speechPadMs = 0,
+    logLevel = ORT_LOGGING_LEVEL_WARNING
+  )
+  var dtr = initDetector(cfg)
+  block:
+    let samples = readSamples("./src/samples.pcm")
+    doAssert dtr.detect(samples) ==
+      @[
+        Segment(startAt: 1.056, endAt: 1.632),
+        Segment(startAt: 2.88, endAt: 3.232),
+        Segment(startAt: 4.448, endAt: 0.0)
+      ]
+  dtr.reset()
+  block:
+    let samples2 = readSamples("./src/samples2.pcm")
+    doAssert dtr.detect(samples2) ==
+      @[
+        Segment(startAt: 3.008, endAt: 6.24),
+        Segment(startAt: 7.072, endAt: 8.16)
+      ]
+  dtr.reset()
+  block:
+    cfg.speechPadMs = 10
+    let samples = readSamples("./src/samples.pcm")
+    doAssert dtr.detect(samples) ==
+      @[
+        Segment(startAt: 1.046, endAt: 1.642),
+        Segment(startAt: 2.87, endAt: 3.242),
+        Segment(startAt: 4.438, endAt: 0.0)
+      ]
 
-let samples = readSamples("./src/samples.pcm")
-echo dtr.detect(samples)
-
-echo "ok"
+  echo "ok"
 
 
 
