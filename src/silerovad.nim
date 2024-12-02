@@ -1,3 +1,5 @@
+## Port of github.com/streamer45/silero-vad-go
+
 import std/[os, times]
 
 when defined(useFuthark) or defined(useFutharkForSilerovad):
@@ -28,7 +30,7 @@ proc newDetectorConfig(
   logLevel: OrtLoggingLevel
 ): DetectorConfig =
   doAssert modelPath.len > 0
-  doAssert sampleRate == 16000 or sampleRate == 8000
+  doAssert sampleRate == 16000 #or sampleRate == 8000
   doAssert threshold in 0'f32 .. 1'f32
   doAssert minSilenceDurationMs >= 0
   doAssert speechPadMs >= 0
@@ -94,6 +96,43 @@ proc initDetector(cfg: DetectorConfig): Detector =
     triggered: false,
     tempEnd: 0'i32
   )
+
+type
+  Segment = object
+    startAt, endAt: float64
+
+proc infer(dtr: Detector, pcm: openArray[float32]): float32 =
+  discard
+
+proc detect(dtr: var Detector, pcm: seq[float32]): seq[Segment] =
+  let windowSize = 512'i32
+  doAssert pcm.len >= windowSize, "not enough samples"
+  let minSilenceSamples = dtr.cfg.minSilenceDurationMs * dtr.cfg.sampleRate div 1000
+  let speechPadSamples = dtr.cfg.speechPadMs * dtr.cfg.sampleRate div 1000
+  result = newSeq[Segment]()
+  let L = len(pcm)-windowSize
+  var i = 0
+  while i < L:
+    let speechProb = dtr.infer(toOpenArray(pcm, i, i+windowSize-1))
+    dtr.currSample += windowSize
+    if speechProb >= dtr.cfg.threshold and dtr.tempEnd != 0:
+      dtr.tempEnd = 0
+    if speechProb >= dtr.cfg.threshold and not dtr.triggered:
+      dtr.triggered = true
+      var speechStartAt = float64(dtr.currSample-windowSize-speechPadSamples) / float64(dtr.cfg.sampleRate)
+      if speechStartAt < 0:
+        speechStartAt = 0
+      result.add Segment(startAt: speechStartAt)
+    if speechProb < (dtr.cfg.threshold-0.15) and dtr.triggered:
+      if dtr.tempEnd == 0:
+        dtr.tempEnd = dtr.currSample
+      if dtr.currSample-dtr.tempEnd >= minSilenceSamples:
+        let speechEndAt = float64(dtr.tempEnd+speechPadSamples) / float64(dtr.cfg.sampleRate)
+        dtr.tempEnd = 0
+        dtr.triggered = false
+        doAssert result.len > 0
+        result[^1].endAt = speechEndAt
+    i += windowSize
 
 let cfg = newDetectorConfig(
   modelPath = "./src/models/silero_vad.onnx",
