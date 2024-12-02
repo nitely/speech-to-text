@@ -1,19 +1,27 @@
 ## Port of github.com/streamer45/silero-vad-go
-
-import std/[os, times]
+## Assumes 16kHz samplerate
+## Assumes mono audio
+##
+## Use this command for wav conversion:
+## ```
+## ffmpeg -i audio_src.wav -ar 16000 -ac 1 audio_dest.wav
+## ```
 
 when defined(useFuthark) or defined(useFutharkForSilerovad):
-  import futhark
+  import std/os
+  import pkg/futhark
   importc:
     outputPath currentSourcePath.parentDir / "onnxruntime_c_api_generated.nim"
     path "./onnxruntime"
     "onnxruntime_c_api.h"
 else:
   {.push dynlib: "libonnxruntime.so".}
-  include onnxruntime_c_api_generated
+  import onnxruntime_c_api_generated
+
+export OrtLoggingLevel
 
 type
-  DetectorConfig = ref object
+  DetectorConfig* = ref object
     modelPath: string
     sampleRate: int32
     threshold: float32
@@ -21,7 +29,7 @@ type
     speechPadMs: int32
     logLevel: OrtLoggingLevel
 
-proc newDetectorConfig(
+proc newDetectorConfig*(
   modelPath: string,
   sampleRate: int32,
   threshold: float32,
@@ -44,10 +52,15 @@ proc newDetectorConfig(
   )
 
 const
-  loggerName = "vad"
+  csLoggerName = "vad"
+  csInput = "input"
+  csState = "state"
+  csSr = "sr"
+  csOutput = "output"
+  csStateN = "stateN"
 
 type
-  Detector = object
+  Detector* = object
     api: ptr OrtApi
     env: ptr OrtEnv
     sessionOpts: ptr OrtSessionOptions
@@ -61,6 +74,7 @@ type
     tempEnd: int32
 
 proc `=destroy`(dtr: Detector) =
+  #echo "=destroy"
   if dtr.memoryInfo != nil:
     dtr.api.ReleaseMemoryInfo(dtr.memoryInfo)
   if dtr.session != nil:
@@ -72,13 +86,13 @@ proc `=destroy`(dtr: Detector) =
   if dtr.cfg != nil:
     `=destroy`(dtr.cfg)
 
-proc initDetector(cfg: DetectorConfig): Detector =
+proc initDetector*(cfg: DetectorConfig): Detector =
   let api = OrtGetApiBase().GetApi(ORT_API_VERSION)
   doAssert api != nil
   var status: OrtStatusPtr = nil
   defer: api.ReleaseStatus(status)
   var env: ptr OrtEnv = nil
-  status = api.CreateEnv(cfg.logLevel, loggerName.cstring, addr env)
+  status = api.CreateEnv(cfg.logLevel, csLoggerName, addr env)
   doAssert status == nil
   var sessionOpts: ptr OrtSessionOptions = nil
   status = api.CreateSessionOptions(addr sessionOpts)
@@ -110,8 +124,8 @@ proc initDetector(cfg: DetectorConfig): Detector =
   )
 
 type
-  Segment = object
-    startAt, endAt: float64
+  Segment* = object
+    startAt*, endAt*: float64
 
 proc infer(dtr: var Detector, pcm2: openArray[float32]): float32 =
   var pcm = newSeq[float32]()
@@ -154,8 +168,8 @@ proc infer(dtr: var Detector, pcm2: openArray[float32]): float32 =
   let outputs = default(array[2, ptr OrtValue])
   defer: dtr.api.ReleaseValue(outputs[0])
   defer: dtr.api.ReleaseValue(outputs[1])
-  const inputNames = ["input".cstring, "state", "sr"]
-  const outputNames = ["output".cstring, "stateN"]
+  const inputNames = [csInput.cstring, csState, csSr]
+  const outputNames = [csOutput.cstring, csStateN]
   status = dtr.api.Run(
     dtr.session, nil, addr inputNames[0], addr inputs[0], csize_t(inputNames.len), addr outputNames[0], csize_t(outputNames.len), addr outputs[0]
   )
@@ -169,7 +183,7 @@ proc infer(dtr: var Detector, pcm2: openArray[float32]): float32 =
   copyMem(addr dtr.state[0], stateN, dtr.state.len*4)
   return cast[ptr float32](prob)[]
 
-proc detect(dtr: var Detector, pcm: seq[float32]): seq[Segment] =
+proc detect*(dtr: var Detector, pcm: seq[float32]): seq[Segment] =
   let windowSize = 512'i32
   doAssert pcm.len >= windowSize, "not enough samples"
   let minSilenceSamples = dtr.cfg.minSilenceDurationMs * dtr.cfg.sampleRate div 1000
@@ -199,7 +213,7 @@ proc detect(dtr: var Detector, pcm: seq[float32]): seq[Segment] =
         result[^1].endAt = speechEndAt
     i += windowSize
 
-proc reset(dtr: var Detector) =
+proc reset*(dtr: var Detector) =
   dtr.currSample = 0
   dtr.triggered = false
   dtr.tempEnd = 0
@@ -208,16 +222,13 @@ proc reset(dtr: var Detector) =
   for i in 0 .. dtr.ctx.len-1:
     dtr.ctx[i] = 0
 
-proc setThreshold(dtr: var Detector, val: float32) =
-  dtr.cfg.threshold = val
-
 when isMainModule:
   func toFloat32(x: array[4, uint8]): float32 =
-      result = cast[float32](x)
+    result = cast[float32](x)
 
   proc readSamples(s: string): seq[float32] =
-    let t = readFile(s)
     result = newSeq[float32]()
+    let t = readFile(s)
     var i = 0
     while i < t.len:
       result.add [t[i+0].uint8, t[i+1].uint8, t[i+2].uint8, t[i+3].uint8].toFloat32

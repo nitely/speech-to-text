@@ -3,3 +3,5 @@ src/libwhisper.a
 src/libwhisper.a_
 src/sttwhisper
 src/silerovad
+samples/jfk3.wav
+tests/testsilerovad
