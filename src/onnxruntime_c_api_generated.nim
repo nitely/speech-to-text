@@ -317,43 +317,43 @@ else:
     hint("Declaration of " & "struct_OrtMemoryInfo" &
         " already exists, not redeclaring")
 type
-  ONNXTensorElementDataType_536871360 = enum_ONNXTensorElementDataType_536871359 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:203:3
-  ONNXType_536871364 = enum_ONNXType_536871363 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:214:3
-  OrtSparseFormat_536871368 = enum_OrtSparseFormat_536871367 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:223:3
-  OrtLoggingLevel_536871374 = enum_OrtLoggingLevel_536871373 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:243:3
-  OrtErrorCode_536871378 = enum_OrtErrorCode_536871377 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:258:3
-  OrtOpAttrType_536871382 = enum_OrtOpAttrType_536871381 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:268:3
-  OrtEnv_536871384 = struct_OrtEnv ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:280:1
-  OrtStatus_536871386 = struct_OrtStatus ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:281:1
-  OrtMemoryInfo_536871388 = struct_OrtMemoryInfo ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:282:1
-  OrtIoBinding_536871390 = struct_OrtIoBinding ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:283:1
-  OrtSession_536871392 = struct_OrtSession ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:284:1
-  OrtValue_536871394 = struct_OrtValue ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:285:1
-  OrtRunOptions_536871396 = struct_OrtRunOptions ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:286:1
-  OrtTypeInfo_536871398 = struct_OrtTypeInfo ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:287:1
-  OrtTensorTypeAndShapeInfo_536871400 = struct_OrtTensorTypeAndShapeInfo ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:288:1
-  OrtMapTypeInfo_536871402 = struct_OrtMapTypeInfo ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:289:1
-  OrtSequenceTypeInfo_536871404 = struct_OrtSequenceTypeInfo ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:290:1
-  OrtOptionalTypeInfo_536871406 = struct_OrtOptionalTypeInfo ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:291:1
-  OrtSessionOptions_536871408 = struct_OrtSessionOptions ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:292:1
-  OrtCustomOpDomain_536871410 = struct_OrtCustomOpDomain ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:293:1
-  OrtModelMetadata_536871412 = struct_OrtModelMetadata ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:294:1
-  OrtThreadPoolParams_536871414 = struct_OrtThreadPoolParams ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:295:1
-  OrtThreadingOptions_536871423 = struct_OrtThreadingOptions ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:296:1
-  OrtArenaCfg_536871425 = struct_OrtArenaCfg ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:297:1
-  OrtPrepackedWeightsContainer_536871427 = struct_OrtPrepackedWeightsContainer ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:298:1
-  OrtTensorRTProviderOptionsV2_536871429 = struct_OrtTensorRTProviderOptionsV2 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:299:1
-  OrtCUDAProviderOptionsV2_536871431 = struct_OrtCUDAProviderOptionsV2 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:300:1
-  OrtCANNProviderOptions_536871433 = struct_OrtCANNProviderOptions ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:301:1
-  OrtDnnlProviderOptions_536871435 = struct_OrtDnnlProviderOptions ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:302:1
-  OrtOp_536871437 = struct_OrtOp ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:303:1
-  OrtOpAttr_536871439 = struct_OrtOpAttr ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:304:1
-  OrtLogger_536871441 = struct_OrtLogger ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:305:1
-  OrtShapeInferContext_536871443 = struct_OrtShapeInferContext ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:306:1
-  OrtLoraAdapter_536871445 = struct_OrtLoraAdapter ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:307:1
-  OrtStatusPtr_536871447 = ptr OrtStatus_536871387 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:312:20
+  ONNXTensorElementDataType_536871360 = enum_ONNXTensorElementDataType_536871359 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:203:3
+  ONNXType_536871364 = enum_ONNXType_536871363 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:214:3
+  OrtSparseFormat_536871368 = enum_OrtSparseFormat_536871367 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:223:3
+  OrtLoggingLevel_536871374 = enum_OrtLoggingLevel_536871373 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:243:3
+  OrtErrorCode_536871378 = enum_OrtErrorCode_536871377 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:258:3
+  OrtOpAttrType_536871382 = enum_OrtOpAttrType_536871381 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:268:3
+  OrtEnv_536871384 = struct_OrtEnv ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:280:1
+  OrtStatus_536871386 = struct_OrtStatus ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:281:1
+  OrtMemoryInfo_536871388 = struct_OrtMemoryInfo ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:282:1
+  OrtIoBinding_536871390 = struct_OrtIoBinding ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:283:1
+  OrtSession_536871392 = struct_OrtSession ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:284:1
+  OrtValue_536871394 = struct_OrtValue ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:285:1
+  OrtRunOptions_536871396 = struct_OrtRunOptions ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:286:1
+  OrtTypeInfo_536871398 = struct_OrtTypeInfo ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:287:1
+  OrtTensorTypeAndShapeInfo_536871400 = struct_OrtTensorTypeAndShapeInfo ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:288:1
+  OrtMapTypeInfo_536871402 = struct_OrtMapTypeInfo ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:289:1
+  OrtSequenceTypeInfo_536871404 = struct_OrtSequenceTypeInfo ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:290:1
+  OrtOptionalTypeInfo_536871406 = struct_OrtOptionalTypeInfo ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:291:1
+  OrtSessionOptions_536871408 = struct_OrtSessionOptions ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:292:1
+  OrtCustomOpDomain_536871410 = struct_OrtCustomOpDomain ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:293:1
+  OrtModelMetadata_536871412 = struct_OrtModelMetadata ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:294:1
+  OrtThreadPoolParams_536871414 = struct_OrtThreadPoolParams ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:295:1
+  OrtThreadingOptions_536871423 = struct_OrtThreadingOptions ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:296:1
+  OrtArenaCfg_536871425 = struct_OrtArenaCfg ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:297:1
+  OrtPrepackedWeightsContainer_536871427 = struct_OrtPrepackedWeightsContainer ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:298:1
+  OrtTensorRTProviderOptionsV2_536871429 = struct_OrtTensorRTProviderOptionsV2 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:299:1
+  OrtCUDAProviderOptionsV2_536871431 = struct_OrtCUDAProviderOptionsV2 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:300:1
+  OrtCANNProviderOptions_536871433 = struct_OrtCANNProviderOptions ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:301:1
+  OrtDnnlProviderOptions_536871435 = struct_OrtDnnlProviderOptions ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:302:1
+  OrtOp_536871437 = struct_OrtOp ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:303:1
+  OrtOpAttr_536871439 = struct_OrtOpAttr ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:304:1
+  OrtLogger_536871441 = struct_OrtLogger ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:305:1
+  OrtShapeInferContext_536871443 = struct_OrtShapeInferContext ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:306:1
+  OrtLoraAdapter_536871445 = struct_OrtLoraAdapter ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:307:1
+  OrtStatusPtr_536871447 = ptr OrtStatus_536871387 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:312:20
   struct_OrtAllocator_536871449 {.pure, inheritable, bycopy.} = object
-    version*: uint32         ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:321:16
+    version*: uint32         ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:321:16
     Alloc*: proc (a0: ptr struct_OrtAllocator_536871450; a1: csize_t): pointer {.
         cdecl.}
     Free*: proc (a0: ptr struct_OrtAllocator_536871450; a1: pointer): void {.
@@ -362,18 +362,18 @@ type
         cdecl.}
     Reserve*: proc (a0: ptr struct_OrtAllocator_536871450; a1: csize_t): pointer {.
         cdecl.}
-  OrtAllocator_536871451 = struct_OrtAllocator_536871450 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:332:3
+  OrtAllocator_536871451 = struct_OrtAllocator_536871450 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:332:3
   OrtLoggingFunction_536871453 = proc (a0: pointer; a1: OrtLoggingLevel_536871375;
                                        a2: cstring; a3: cstring; a4: cstring;
-                                       a5: cstring): void {.cdecl.} ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:334:28
-  GraphOptimizationLevel_536871457 = enum_GraphOptimizationLevel_536871456 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:348:3
-  ExecutionMode_536871461 = enum_ExecutionMode_536871460 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:353:3
-  OrtLanguageProjection_536871465 = enum_OrtLanguageProjection_536871464 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:366:3
-  OrtKernelInfo_536871467 = struct_OrtKernelInfo ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:369:30
-  OrtKernelContext_536871469 = struct_OrtKernelContext ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:371:33
-  OrtCustomOp_536871471 = struct_OrtCustomOp_536871474 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:373:28
+                                       a5: cstring): void {.cdecl.} ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:334:28
+  GraphOptimizationLevel_536871457 = enum_GraphOptimizationLevel_536871456 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:348:3
+  ExecutionMode_536871461 = enum_ExecutionMode_536871460 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:353:3
+  OrtLanguageProjection_536871465 = enum_OrtLanguageProjection_536871464 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:366:3
+  OrtKernelInfo_536871467 = struct_OrtKernelInfo ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:369:30
+  OrtKernelContext_536871469 = struct_OrtKernelContext ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:371:33
+  OrtCustomOp_536871471 = struct_OrtCustomOp_536871474 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:373:28
   struct_OrtCustomOp_536871473 {.pure, inheritable, bycopy.} = object
-    version*: uint32         ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:4786:8
+    version*: uint32         ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:4781:8
     CreateKernel*: proc (a0: ptr struct_OrtCustomOp_536871474; a1: ptr OrtApi_536871512;
                          a2: ptr OrtKernelInfo_536871468): pointer {.cdecl.}
     GetName*: proc (a0: ptr struct_OrtCustomOp_536871474): cstring {.cdecl.}
@@ -420,12 +420,12 @@ type
     ReleaseMayInplace*: proc (a0: ptr cint; a1: ptr cint): void {.cdecl.}
     GetAliasMap*: proc (a0: ptr ptr cint; a1: ptr ptr cint): csize_t {.cdecl.}
     ReleaseAliasMap*: proc (a0: ptr cint; a1: ptr cint): void {.cdecl.}
-  OrtAllocatorType_536871477 = enum_OrtAllocatorType_536871476 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:379:3
-  OrtMemType_536871481 = enum_OrtMemType_536871480 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:389:3
-  OrtMemoryInfoDeviceType_536871485 = enum_OrtMemoryInfoDeviceType_536871484 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:397:3
-  OrtCudnnConvAlgoSearch_536871489 = enum_OrtCudnnConvAlgoSearch_536871488 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:405:3
+  OrtAllocatorType_536871477 = enum_OrtAllocatorType_536871476 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:379:3
+  OrtMemType_536871481 = enum_OrtMemType_536871480 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:389:3
+  OrtMemoryInfoDeviceType_536871485 = enum_OrtMemoryInfoDeviceType_536871484 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:397:3
+  OrtCudnnConvAlgoSearch_536871489 = enum_OrtCudnnConvAlgoSearch_536871488 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:405:3
   struct_OrtCUDAProviderOptions_536871491 {.pure, inheritable, bycopy.} = object
-    device_id*: cint         ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:411:16
+    device_id*: cint         ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:411:16
     cudnn_conv_algo_search*: OrtCudnnConvAlgoSearch_536871490
     gpu_mem_limit*: csize_t
     arena_extend_strategy*: cint
@@ -436,9 +436,9 @@ type
     tunable_op_enable*: cint
     tunable_op_tuning_enable*: cint
     tunable_op_max_tuning_duration_ms*: cint
-  OrtCUDAProviderOptions_536871493 = struct_OrtCUDAProviderOptions_536871492 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:492:3
+  OrtCUDAProviderOptions_536871493 = struct_OrtCUDAProviderOptions_536871492 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:492:3
   struct_OrtROCMProviderOptions_536871495 {.pure, inheritable, bycopy.} = object
-    device_id*: cint         ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:498:16
+    device_id*: cint         ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:498:16
     miopen_conv_exhaustive_search*: cint
     gpu_mem_limit*: csize_t
     arena_extend_strategy*: cint
@@ -450,9 +450,9 @@ type
     tunable_op_enable*: cint
     tunable_op_tuning_enable*: cint
     tunable_op_max_tuning_duration_ms*: cint
-  OrtROCMProviderOptions_536871497 = struct_OrtROCMProviderOptions_536871496 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:581:3
+  OrtROCMProviderOptions_536871497 = struct_OrtROCMProviderOptions_536871496 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:581:3
   struct_OrtTensorRTProviderOptions_536871499 {.pure, inheritable, bycopy.} = object
-    device_id*: cint         ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:587:16
+    device_id*: cint         ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:587:16
     has_user_compute_stream*: cint
     user_compute_stream*: pointer
     trt_max_partition_iterations*: cint
@@ -470,9 +470,9 @@ type
     trt_engine_decryption_enable*: cint
     trt_engine_decryption_lib_path*: cstring
     trt_force_sequential_engine_build*: cint
-  OrtTensorRTProviderOptions_536871501 = struct_OrtTensorRTProviderOptions_536871500 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:609:3
+  OrtTensorRTProviderOptions_536871501 = struct_OrtTensorRTProviderOptions_536871500 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:609:3
   struct_OrtMIGraphXProviderOptions_536871503 {.pure, inheritable, bycopy.} = object
-    device_id*: cint         ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:615:16
+    device_id*: cint         ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:615:16
     migraphx_fp16_enable*: cint
     migraphx_int8_enable*: cint
     migraphx_use_native_calibration_table*: cint
@@ -482,9 +482,9 @@ type
     migraphx_load_compiled_model*: cint
     migraphx_load_model_path*: cstring
     migraphx_exhaustive_tune*: bool
-  OrtMIGraphXProviderOptions_536871505 = struct_OrtMIGraphXProviderOptions_536871504 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:626:3
+  OrtMIGraphXProviderOptions_536871505 = struct_OrtMIGraphXProviderOptions_536871504 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:626:3
   struct_OrtOpenVINOProviderOptions_536871507 {.pure, inheritable, bycopy.} = object
-    device_type*: cstring    ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:637:16
+    device_type*: cstring    ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:632:16
     enable_npu_fast_compile*: uint8
     device_id*: cstring
     num_of_threads*: csize_t
@@ -492,11 +492,11 @@ type
     context*: pointer
     enable_opencl_throttling*: uint8
     enable_dynamic_shapes*: uint8
-  OrtOpenVINOProviderOptions_536871509 = struct_OrtOpenVINOProviderOptions_536871508 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:660:3
-  OrtApi_536871511 = struct_OrtApi_536871514 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:663:23
+  OrtOpenVINOProviderOptions_536871509 = struct_OrtOpenVINOProviderOptions_536871508 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:655:3
+  OrtApi_536871511 = struct_OrtApi_536871514 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:658:23
   struct_OrtApi_536871513 {.pure, inheritable, bycopy.} = object
     CreateStatus*: proc (a0: OrtErrorCode_536871379; a1: cstring): ptr OrtStatus_536871387 {.
-        cdecl.}              ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:742:8
+        cdecl.}              ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:737:8
     GetErrorCode*: proc (a0: ptr OrtStatus_536871387): OrtErrorCode_536871379 {.
         cdecl.}
     GetErrorMessage*: proc (a0: ptr OrtStatus_536871387): cstring {.cdecl.}
@@ -1252,26 +1252,26 @@ type
     SetEpDynamicOptions*: proc (a0: ptr OrtSession_536871393; a1: ptr cstring;
                                 a2: ptr cstring; a3: csize_t): OrtStatusPtr_536871448 {.
         cdecl.}
-  OrtTrainingApi_536871515 = struct_OrtTrainingApi ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:666:31
+  OrtTrainingApi_536871515 = struct_OrtTrainingApi ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:661:31
   struct_OrtApiBase_536871517 {.pure, inheritable, bycopy.} = object
-    GetApi*: proc (a0: uint32): ptr OrtApi_536871512 {.cdecl.} ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:672:8
+    GetApi*: proc (a0: uint32): ptr OrtApi_536871512 {.cdecl.} ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:667:8
     GetVersionString*: proc (): cstring {.cdecl.}
-  OrtApiBase_536871519 = struct_OrtApiBase_536871518 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:691:27
-  OrtThreadWorkerFn_536871521 = proc (a0: pointer): void {.cdecl.} ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:704:16
+  OrtApiBase_536871519 = struct_OrtApiBase_536871518 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:686:27
+  OrtThreadWorkerFn_536871521 = proc (a0: pointer): void {.cdecl.} ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:699:16
   struct_OrtCustomHandleType_536871523 {.pure, inheritable, bycopy.} = object
-    compiler_place_holder*: cschar ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:706:22
-  OrtCustomThreadHandle_536871525 = ptr struct_OrtCustomHandleType_536871524 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:708:4
+    compiler_place_holder*: cschar ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:701:22
+  OrtCustomThreadHandle_536871525 = ptr struct_OrtCustomHandleType_536871524 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:703:4
   OrtCustomCreateThreadFn_536871527 = proc (a0: pointer; a1: OrtThreadWorkerFn_536871522;
-      a2: pointer): OrtCustomThreadHandle_536871526 {.cdecl.} ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:715:33
+      a2: pointer): OrtCustomThreadHandle_536871526 {.cdecl.} ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:710:33
   OrtCustomJoinThreadFn_536871529 = proc (a0: OrtCustomThreadHandle_536871526): void {.
-      cdecl.}                ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:722:16
+      cdecl.}                ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:717:16
   RegisterCustomOpsFn_536871531 = proc (a0: ptr OrtSessionOptions_536871409;
                                         a1: ptr OrtApiBase_536871520): ptr OrtStatus_536871387 {.
-      cdecl.}                ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:724:34
+      cdecl.}                ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:719:34
   RunAsyncCallbackFn_536871533 = proc (a0: pointer; a1: ptr ptr OrtValue_536871395;
                                        a2: csize_t; a3: OrtStatusPtr_536871448): void {.
-      cdecl.}                ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:733:16
-  OrtCustomOpInputOutputCharacteristic_536871537 = enum_OrtCustomOpInputOutputCharacteristic_536871536 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:4780:3
+      cdecl.}                ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:728:16
+  OrtCustomOpInputOutputCharacteristic_536871537 = enum_OrtCustomOpInputOutputCharacteristic_536871536 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:4775:3
   OrtKernelContext_536871470 = (when declared(OrtKernelContext):
     when ownSizeof(OrtKernelContext) != ownSizeof(OrtKernelContext_536871469):
       static :
@@ -2600,11 +2600,11 @@ else:
   static :
     hint("Declaration of " & "OrtStatus" & " already exists, not redeclaring")
 when not declared(ORT_API_VERSION):
-  when 21 is static:
+  when 20 is static:
     const
-      ORT_API_VERSION* = 21  ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:41:9
+      ORT_API_VERSION* = 20  ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:41:9
   else:
-    let ORT_API_VERSION* = 21 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime_c_api.h:41:9
+    let ORT_API_VERSION* = 20 ## Generated based on /home/esteban/AtomProjects/nim-stt-whisper/src/onnxruntime/onnxruntime_c_api.h:41:9
 else:
   static :
     hint("Declaration of " & "ORT_API_VERSION" &

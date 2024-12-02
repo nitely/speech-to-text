@@ -5,3 +5,4 @@ switch("passL", "-lm")
 switch("passC", "-fopenmp")
 #switch("passL", "-lvulkan -fopenmp")
 switch("passL", "-lopenblas -fopenmp")
+switch("passL", "-lonnxruntime")  # 1.20.1
