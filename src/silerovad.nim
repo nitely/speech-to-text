@@ -60,7 +60,7 @@ type
     triggered: bool
     tempEnd: int32
 
-proc `=destroy`(dtr: var Detector) =
+proc `=destroy`(dtr: Detector) =
   if dtr.memoryInfo != nil:
     dtr.api.ReleaseMemoryInfo(dtr.memoryInfo)
   if dtr.session != nil:
@@ -113,8 +113,61 @@ type
   Segment = object
     startAt, endAt: float64
 
-proc infer(dtr: Detector, pcm: openArray[float32]): float32 =
-  discard
+proc infer(dtr: var Detector, pcm2: openArray[float32]): float32 =
+  var pcm = newSeq[float32]()
+  for x in pcm2:
+    pcm.add x
+  if dtr.currSample > 0:
+    pcm.setLen 0
+    for i in 0 .. dtr.ctx.len-1:
+      pcm.add dtr.ctx[i]
+    for i in 0 .. pcm2.len-1:
+      pcm.add pcm2[i]
+  doAssert pcm2.len >= dtr.ctx.len
+  for i in 0 .. dtr.ctx.len-1:
+    dtr.ctx[i] = pcm2[pcm2.len-dtr.ctx.len+i]
+  var pcmValue: ptr OrtValue = nil
+  defer: dtr.api.ReleaseValue(pcmValue)
+  let pcmInputDims = [1'i64, pcm.len]
+  var status: OrtStatusPtr = nil
+  defer: dtr.api.ReleaseStatus(status)
+  status = dtr.api.CreateTensorWithDataAsOrtValue(
+    dtr.memoryInfo, addr pcm[0], csize_t(pcm.len*4), addr pcmInputDims[0], csize_t(pcmInputDims.len), ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT, addr pcmValue
+  )
+  doAssert status == nil
+  var stateValue: ptr OrtValue = nil
+  defer: dtr.api.ReleaseValue(stateValue)
+  const stateNodeInputDims = [2'i64, 1, 128]
+  status = dtr.api.CreateTensorWithDataAsOrtValue(
+    dtr.memoryInfo, addr dtr.state[0], csize_t(dtr.state.len*4), addr stateNodeInputDims[0], csize_t(stateNodeInputDims.len), ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT, addr stateValue
+  )
+  doAssert status == nil
+  var rateValue: ptr OrtValue = nil
+  defer: dtr.api.ReleaseValue(rateValue)
+  const rateInputDims = [1'i64]
+  let rate = [dtr.cfg.sampleRate.int64]
+  status = dtr.api.CreateTensorWithDataAsOrtValue(
+    dtr.memoryInfo, addr rate[0], csize_t(8), addr rateInputDims[0], csize_t(rateInputDims.len), ONNX_TENSOR_ELEMENT_DATA_TYPE_INT64, addr rateValue
+  )
+  doAssert status == nil
+  let inputs = [pcmValue, stateValue, rateValue]
+  let outputs = default(array[2, ptr OrtValue])
+  defer: dtr.api.ReleaseValue(outputs[0])
+  defer: dtr.api.ReleaseValue(outputs[1])
+  const inputNames = ["input".cstring, "state", "sr"]
+  const outputNames = ["output".cstring, "stateN"]
+  status = dtr.api.Run(
+    dtr.session, nil, addr inputNames[0], addr inputs[0], csize_t(inputNames.len), addr outputNames[0], csize_t(outputNames.len), addr outputs[0]
+  )
+  doAssert status == nil
+  let prob: pointer = nil
+  let stateN: pointer = nil
+  status = dtr.api.GetTensorMutableData(outputs[0], addr prob)
+  doAssert status == nil
+  status = dtr.api.GetTensorMutableData(outputs[1], addr stateN)
+  doAssert status == nil
+  copyMem(addr dtr.state[0], stateN, dtr.state.len*4)
+  return cast[ptr float32](prob)[]
 
 proc detect(dtr: var Detector, pcm: seq[float32]): seq[Segment] =
   let windowSize = 512'i32
@@ -162,11 +215,26 @@ let cfg = newDetectorConfig(
   modelPath = "./src/models/silero_vad.onnx",
   sampleRate = 16000,
   threshold = 0.5,
-  minSilenceDurationMs = 50,
-  speechPadMs = 50,
+  minSilenceDurationMs = 0,
+  speechPadMs = 0,
   logLevel = ORT_LOGGING_LEVEL_WARNING
 )
-let detector = initDetector(cfg)
+var dtr = initDetector(cfg)
+
+func toFloat32(x: array[0..3, char]): float32 =
+    result = cast[float32](x)
+
+proc readSamples(s: string): seq[float32] =
+  let txt = readFile(s)
+  result = newSeq[float32]()
+  var i = 0
+  while i < txt.len:
+    #result.add [(txt[0].uint8+1).char, txt[1], txt[2], txt[3]].toFloat32
+    result.add [txt[0], txt[1], txt[2], txt[3]].toFloat32
+    i += 4
+
+let samples = readSamples("./src/samples.pcm")
+echo dtr.detect(samples)
 
 echo "ok"
 
