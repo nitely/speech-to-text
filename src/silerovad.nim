@@ -60,6 +60,18 @@ type
     triggered: bool
     tempEnd: int32
 
+proc `=destroy`(dtr: var Detector) =
+  if dtr.memoryInfo != nil:
+    dtr.api.ReleaseMemoryInfo(dtr.memoryInfo)
+  if dtr.session != nil:
+    dtr.api.ReleaseSession(dtr.session)
+  if dtr.sessionOpts != nil:
+    dtr.api.ReleaseSessionOptions(dtr.sessionOpts)
+  if dtr.env != nil:
+    dtr.api.ReleaseEnv(dtr.env)
+  if dtr.cfg != nil:
+    `=destroy`(dtr.cfg)
+
 proc initDetector(cfg: DetectorConfig): Detector =
   let api = OrtGetApiBase().GetApi(ORT_API_VERSION)
   doAssert api != nil
@@ -133,6 +145,18 @@ proc detect(dtr: var Detector, pcm: seq[float32]): seq[Segment] =
         doAssert result.len > 0
         result[^1].endAt = speechEndAt
     i += windowSize
+
+proc reset(dtr: var Detector) =
+  dtr.currSample = 0
+  dtr.triggered = false
+  dtr.tempEnd = 0
+  for i in 0 .. dtr.state.len-1:
+    dtr.state[i] = 0
+  for i in 0 .. dtr.ctx.len-1:
+    dtr.ctx[i] = 0
+
+proc setThreshold(dtr: var Detector, val: float32) =
+  dtr.cfg.threshold = val
 
 let cfg = newDetectorConfig(
   modelPath = "./src/models/silero_vad.onnx",
