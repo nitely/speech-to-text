@@ -13,7 +13,7 @@ Speech-To-Text experiments; nothing to see here; shhhh
 
 - Voice comms
 - Transcriptions
-- Closed capture
+- Closed Caption
 - Real-time translation
 - Capture system output speech to text
 
