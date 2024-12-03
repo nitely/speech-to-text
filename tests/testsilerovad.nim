@@ -40,7 +40,7 @@ test "Test jfk.wav":
     speechPadMs = 30,
     logLevel = OrtLoggingLevel.ORT_LOGGING_LEVEL_WARNING
   )
-  var dtr = initDetector(cfg)
+  var dtr = newDetector(cfg)
   let samples = readWav("./samples/jfk.wav")
   doAssert dtr.detect(samples) ==
     @[

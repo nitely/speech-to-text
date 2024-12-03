@@ -21,13 +21,19 @@ else:
 export OrtLoggingLevel
 
 type
-  DetectorConfig* = ref object
+  DetectorConfigObj = object
     modelPath: string
     sampleRate: int32
     threshold: float32
     minSilenceDurationMs: int32
     speechPadMs: int32
     logLevel: OrtLoggingLevel
+  DetectorConfig* = ref DetectorConfigObj
+
+proc `=sink`(dest: var DetectorConfigObj; src: DetectorConfigObj) {.error.}
+proc `=dup`(src: DetectorConfigObj): DetectorConfigObj {.error.}
+proc `=copy`(dest: var DetectorConfigObj; src: DetectorConfigObj) {.error.}
+proc `=wasMoved`(dest: var DetectorConfigObj) {.error.}
 
 proc newDetectorConfig*(
   modelPath: string,
@@ -60,7 +66,7 @@ const
   csStateN = "stateN"
 
 type
-  Detector* = object
+  DetectorObj = object
     api: ptr OrtApi
     env: ptr OrtEnv
     sessionOpts: ptr OrtSessionOptions
@@ -72,8 +78,14 @@ type
     currSample: int32
     triggered: bool
     tempEnd: int32
+  Detector* = ref DetectorObj
 
-proc `=destroy`(dtr: Detector) =
+proc `=sink`(dest: var DetectorObj; src: DetectorObj) {.error.}
+proc `=dup`(src: DetectorObj): DetectorObj {.error.}
+proc `=copy`(dest: var DetectorObj; src: DetectorObj) {.error.}
+proc `=wasMoved`(dest: var DetectorObj) {.error.}
+
+proc `=destroy`(dtr: DetectorObj) =
   #echo "=destroy"
   if dtr.memoryInfo != nil:
     dtr.api.ReleaseMemoryInfo(dtr.memoryInfo)
@@ -83,10 +95,8 @@ proc `=destroy`(dtr: Detector) =
     dtr.api.ReleaseSessionOptions(dtr.sessionOpts)
   if dtr.env != nil:
     dtr.api.ReleaseEnv(dtr.env)
-  if dtr.cfg != nil:
-    `=destroy`(dtr.cfg)
 
-proc initDetector*(cfg: DetectorConfig): Detector =
+proc newDetector*(cfg: DetectorConfig): Detector =
   let api = OrtGetApiBase().GetApi(ORT_API_VERSION)
   doAssert api != nil
   var status: OrtStatusPtr = nil
@@ -242,7 +252,7 @@ when isMainModule:
     speechPadMs = 0,
     logLevel = ORT_LOGGING_LEVEL_WARNING
   )
-  var dtr = initDetector(cfg)
+  var dtr = newDetector(cfg)
   block:
     let samples = readSamples("./src/samples.pcm")
     doAssert dtr.detect(samples) ==
