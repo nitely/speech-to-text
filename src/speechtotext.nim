@@ -39,27 +39,50 @@ proc initSpeechToText*(modelPath: string, useGpu = true): SpeechToText =
   result = SpeechToText(modelPath: modelPath)
   result.ctx = whisper_init_from_file_with_params(result.modelPath.cstring, cparams)
 
-proc toText*(stt: SpeechToText, pcm: seq[float32], prompt = ""): string =
-  if pcm.len == 0:
-    return ""
-  const extraPad = 1000
-  var pcm = pcm
-  if pcm.len < 16000+extraPad:
-    pcm.setLen 16000+extraPad
+type
+  SttParams* = object
+    wparams: struct_whisper_full_params
+
+const languageEn = "en"
+const languageJa = "ja"
+
+type SttLang* = enum
+  sttLangEn, sttLangJa
+
+proc initSttParams*(
+  lang = sttLangEn,
+  translate = false,
+  threads = 1
+): SttParams =
   var wparams = whisper_full_default_params(WHISPER_SAMPLING_GREEDY)
   wparams.print_progress = false
   wparams.print_special = false
   wparams.print_realtime = false
   wparams.print_timestamps = false
   wparams.single_segment = false
-  wparams.translate = true
+  wparams.translate = translate
   wparams.max_tokens = 0
-  wparams.language = "ja"
-  wparams.n_threads = 2
+  wparams.language = case lang
+    of sttLangEn: languageEn
+    of sttLangJa: languageJa
+  wparams.n_threads = threads.cint
   wparams.audio_ctx = 0
-  if prompt.len > 0:
-    wparams.initial_prompt = prompt.cstring
-  if whisper_full(stt.ctx, wparams, addr pcm[0], pcm.len.cint) != 0:
+  SttParams(
+    wparams: wparams
+  )
+
+proc toText*(
+  stt: SpeechToText,
+  pcm: seq[float32],
+  params: SttParams
+): string =
+  if pcm.len == 0:
+    return ""
+  const extraPad = 1000
+  var pcm = pcm
+  if pcm.len < 16000+extraPad:
+    pcm.setLen 16000+extraPad
+  if whisper_full(stt.ctx, params.wparams, addr pcm[0], pcm.len.cint) != 0:
     echo "Error: failed to process audio"
     return ""
   let n_segments = whisper_full_n_segments(stt.ctx)
@@ -68,3 +91,10 @@ proc toText*(stt: SpeechToText, pcm: seq[float32], prompt = ""): string =
     result.add whisper_full_get_segment_text(stt.ctx, i)
     if i < n_segments-1:
       result.add " "
+
+proc toText*(
+  stt: SpeechToText,
+  pcm: seq[float32]
+): string =
+  let defaultParams = initSttParams()
+  toText(stt, pcm, defaultParams)
