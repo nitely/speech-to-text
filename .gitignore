@@ -6,6 +6,7 @@ src/silerovad
 src/speechtotext
 samples/jfk3.wav
 samples/testja.wav
+samples/testja2.wav
 tests/testsilerovad
 tests/testspeechtotext
 tests/testall

@@ -52,7 +52,8 @@ type SttLang* = enum
 proc initSttParams*(
   lang = sttLangEn,
   translate = false,
-  threads = 1
+  threads = 1,
+  audioCtx = 0
 ): SttParams =
   var wparams = whisper_full_default_params(WHISPER_SAMPLING_GREEDY)
   wparams.print_progress = false
@@ -62,11 +63,11 @@ proc initSttParams*(
   wparams.single_segment = false
   wparams.translate = translate
   wparams.max_tokens = 0
-  wparams.language = case lang
-    of sttLangEn: languageEn
-    of sttLangJa: languageJa
+  case lang
+  of sttLangEn: wparams.language = languageEn
+  of sttLangJa: wparams.language = languageJa
   wparams.n_threads = threads.cint
-  wparams.audio_ctx = 0
+  wparams.audio_ctx = audioCtx.cint
   SttParams(
     wparams: wparams
   )
