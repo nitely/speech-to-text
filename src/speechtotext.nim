@@ -20,10 +20,10 @@ whisper_log_set(cb_log_disable, nil)
 proc toText*(pcm: seq[float32]): string =
   if pcm.len == 0:
     return ""
-  const extra = 1000
+  const extraPad = 1000
   var pcm = pcm
-  if pcm.len < 16000+extra:
-    pcm.setLen 16000+extra
+  if pcm.len < 16000+extraPad:
+    pcm.setLen 16000+extraPad
   let model = "./src/models/ggml-base.en-q5_0.bin"
   #let model = "./src/models/ggml-large-v3-turbo-q5_0.bin"
   #let model = "./src/models/ggml-model-whisper-small-q5_1.bin"
@@ -31,6 +31,7 @@ proc toText*(pcm: seq[float32]): string =
   cparams.use_gpu = true
   cparams.flash_attn = false
   var ctx = whisper_init_from_file_with_params(model.cstring, cparams)
+  defer: whisper_free(ctx)
   var wparams = whisper_full_default_params(WHISPER_SAMPLING_GREEDY)
   wparams.print_progress = false
   wparams.print_special = false
