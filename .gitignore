@@ -5,6 +5,7 @@ src/sttwhisper
 src/silerovad
 src/speechtotext
 samples/jfk3.wav
+samples/testja.wav
 tests/testsilerovad
 tests/testspeechtotext
 tests/testall
