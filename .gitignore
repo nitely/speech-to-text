@@ -3,5 +3,8 @@ src/libwhisper.a
 src/libwhisper.a_
 src/sttwhisper
 src/silerovad
+src/speechtotext
 samples/jfk3.wav
 tests/testsilerovad
+tests/testspeechtotext
+tests/testall

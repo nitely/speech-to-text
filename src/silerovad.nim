@@ -16,7 +16,7 @@ when defined(useFuthark) or defined(useFutharkForSilerovad):
     "onnxruntime_c_api.h"
 else:
   {.push dynlib: "libonnxruntime.so".}
-  import onnxruntime_c_api_generated
+  import ./onnxruntime_c_api_generated
 
 export OrtLoggingLevel
 
@@ -95,6 +95,8 @@ proc `=destroy`(dtr: DetectorObj) =
     dtr.api.ReleaseSessionOptions(dtr.sessionOpts)
   if dtr.env != nil:
     dtr.api.ReleaseEnv(dtr.env)
+  if dtr.cfg != nil:
+    `=destroy`(dtr.cfg)
 
 proc newDetector*(cfg: DetectorConfig): Detector =
   let api = OrtGetApiBase().GetApi(ORT_API_VERSION)
