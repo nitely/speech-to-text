@@ -256,7 +256,7 @@ when isMainModule:
   )
   var dtr = newDetector(cfg)
   block:
-    let samples = readSamples("./src/samples.pcm")
+    let samples = readSamples("./samples/samples.pcm")
     doAssert dtr.detect(samples) ==
       @[
         Segment(startAt: 1.056, endAt: 1.632),
@@ -265,7 +265,7 @@ when isMainModule:
       ]
   dtr.reset()
   block:
-    let samples2 = readSamples("./src/samples2.pcm")
+    let samples2 = readSamples("./samples/samples2.pcm")
     doAssert dtr.detect(samples2) ==
       @[
         Segment(startAt: 3.008, endAt: 6.24),
@@ -274,7 +274,7 @@ when isMainModule:
   dtr.reset()
   block:
     cfg.speechPadMs = 10
-    let samples = readSamples("./src/samples.pcm")
+    let samples = readSamples("./samples/samples.pcm")
     doAssert dtr.detect(samples) ==
       @[
         Segment(startAt: 1.046, endAt: 1.642),
