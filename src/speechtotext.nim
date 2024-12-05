@@ -9,7 +9,7 @@ when defined(useFuthark) or defined(useFutharkForWhisper):
     rename FILE, CFile
     "whisper.h"
 else:
-  {.passL: currentSourcePath.parentDir() & "/libwhisper.a".}
+  {.passL: "libs/libwhisper.a".}
   import ./whisper_generated
 
 proc cb_log_disable(level: enum_ggml_log_level, message: cstring, user_data: pointer) {.cdecl.} =

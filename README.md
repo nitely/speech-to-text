@@ -24,3 +24,8 @@ Learnings.
 ## License
 
 Unlicense. You cannot use this or even look at it. Move along.
+
+
+## Notes
+
+- [Static onnxruntime](https://huggingface.co/csukuangfj/onnxruntime-libs/commits/main) example: `https://huggingface.co/csukuangfj/onnxruntime-libs/blob/main/file_name.zip`

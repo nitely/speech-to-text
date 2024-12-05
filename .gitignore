@@ -1,7 +1,3 @@
-src/models
-src/libwhisper.a
-src/libwhisper.a_
-src/sttwhisper
 src/silerovad
 src/speechtotext
 samples/jfk3.wav
@@ -10,3 +6,6 @@ samples/testja2.wav
 tests/testsilerovad
 tests/testspeechtotext
 tests/testall
+models/*
+!models/silero_vad.onnx
+!models/ggml-base-q5_1.bin

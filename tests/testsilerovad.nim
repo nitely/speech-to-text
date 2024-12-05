@@ -3,8 +3,9 @@ import ../src/silerovad
 import ./utils
 
 test "Test jfk.wav":
+  let samples = readWav("./samples/jfk.wav")
   let cfg = newDetectorConfig(
-    modelPath = "./src/models/silero_vad.onnx",
+    modelPath = "./models/silero_vad.onnx",
     sampleRate = 16000,
     threshold = 0.5,
     minSilenceDurationMs = 100,
@@ -12,7 +13,6 @@ test "Test jfk.wav":
     logLevel = OrtLoggingLevel.ORT_LOGGING_LEVEL_WARNING
   )
   var dtr = newDetector(cfg)
-  let samples = readWav("./samples/jfk.wav")
   doAssert dtr.detect(samples) ==
     @[
       Segment(startAt: 0.29, endAt: 2.238),  # And so my fellow Americans

@@ -3,6 +3,7 @@ author        = "nitely"
 description   = "Speech-To-Text"
 license       = "MIT"
 srcDir        = "src"
+skipDirs = @["tests", "docs", "lib", "models"]
 
 requires "nim >= 2.2.0"
 requires "futhark"

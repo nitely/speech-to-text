@@ -15,7 +15,7 @@ when defined(useFuthark) or defined(useFutharkForSilerovad):
     path "./onnxruntime"
     "onnxruntime_c_api.h"
 else:
-  {.push dynlib: "libonnxruntime.so".}
+  {.passL: "libs/libonnxruntime.a".}
   import ./onnxruntime_c_api_generated
 
 export OrtLoggingLevel
@@ -242,7 +242,7 @@ when isMainModule:
       i += 4
 
   let cfg = newDetectorConfig(
-    modelPath = "./src/models/silero_vad.onnx",
+    modelPath = "./models/silero_vad.onnx",
     sampleRate = 16000,
     threshold = 0.5,
     minSilenceDurationMs = 0,
