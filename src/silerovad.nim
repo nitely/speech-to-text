@@ -95,8 +95,7 @@ proc `=destroy`(dtr: DetectorObj) =
     dtr.api.ReleaseSessionOptions(dtr.sessionOpts)
   if dtr.env != nil:
     dtr.api.ReleaseEnv(dtr.env)
-  if dtr.cfg != nil:
-    `=destroy`(dtr.cfg)
+  `=destroy`(dtr.cfg)
 
 proc newDetector*(cfg: DetectorConfig): Detector =
   let api = OrtGetApiBase().GetApi(ORT_API_VERSION)
@@ -140,15 +139,11 @@ type
     startAt*, endAt*: float64
 
 proc infer(dtr: var Detector, pcm2: openArray[float32]): float32 =
-  var pcm = newSeq[float32]()
-  for x in pcm2:
-    pcm.add x
+  var pcm = newSeqOfCap[float32](pcm2.len+dtr.ctx.len)
   if dtr.currSample > 0:
-    pcm.setLen 0
     for i in 0 .. dtr.ctx.len-1:
       pcm.add dtr.ctx[i]
-    for i in 0 .. pcm2.len-1:
-      pcm.add pcm2[i]
+  pcm.add pcm2
   doAssert pcm2.len >= dtr.ctx.len
   for i in 0 .. dtr.ctx.len-1:
     dtr.ctx[i] = pcm2[pcm2.len-dtr.ctx.len+i]
