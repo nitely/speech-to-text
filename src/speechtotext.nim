@@ -1,6 +1,6 @@
-import std/os
 
-when defined(useFuthark) or defined(useFutharkForWhisper):
+when defined(useFutharkForWhisper):
+  import std/os
   import futhark
 
   importc:

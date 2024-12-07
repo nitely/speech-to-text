@@ -7,7 +7,7 @@
 ## ffmpeg -i audio_src.wav -ar 16000 -ac 1 audio_dest.wav
 ## ```
 
-when defined(useFuthark) or defined(useFutharkForSilerovad):
+when defined(useFutharkForSilerovad):
   import std/os
   import pkg/futhark
   importc:
@@ -86,7 +86,6 @@ proc `=copy`(dest: var DetectorObj; src: DetectorObj) {.error.}
 proc `=wasMoved`(dest: var DetectorObj) {.error.}
 
 proc `=destroy`(dtr: DetectorObj) =
-  #echo "=destroy"
   if dtr.memoryInfo != nil:
     dtr.api.ReleaseMemoryInfo(dtr.memoryInfo)
   if dtr.session != nil:
