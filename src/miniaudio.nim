@@ -50,7 +50,19 @@ proc captureCallback(
   frameCount: ma_uint32
 ) {.cdecl.} =
   #echo "callback"
-  discard
+  if pInput == nil:
+    echo "no input"
+    return
+  var rec = cast[ptr Recorder](pDevice.pUserData)
+  let input = cast[ptr UncheckedArray[float32]](pInput)
+  withLock rec.buffLock:
+    if rec.buff.len > 1_000_000:
+      echo "dropping samples"
+      rec.buff.setLen 0
+    let L = rec.buff.len
+    rec.buff.setLen L+frameCount.int
+    for i in 0 .. frameCount.int-1:
+      rec.buff[L+i] = input[i]
 
 proc listen(rec: ptr Recorder) {.thread.} =
   var deviceConfig: ma_device_config
@@ -60,7 +72,7 @@ proc listen(rec: ptr Recorder) {.thread.} =
   deviceConfig.capture.channels = 1
   deviceConfig.sampleRate = 16000
   deviceConfig.dataCallback = captureCallback
-  deviceConfig.pUserData = addr rec
+  deviceConfig.pUserData = rec
   # XXX fix works in my machine
   deviceConfig.capture.pDeviceID = nil #addr captureDeviceArray[0].id
   if ma_device_init(nil, addr deviceConfig, addr device) != MA_SUCCESS:
