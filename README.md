@@ -23,7 +23,7 @@ Learnings.
 
 ## License
 
-Unlicense. You cannot use this or even look at it. Move along.
+Unlicense. All rights reserved.
 
 ## Notes
 

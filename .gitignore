@@ -10,3 +10,4 @@ tests/testall
 models/*
 !models/silero_vad.onnx
 !models/ggml-base-q5_1.bin
+out.wav
