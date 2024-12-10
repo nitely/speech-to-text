@@ -17,10 +17,13 @@ proc main =
     speechPadMs = 30,
     logLevel = OrtLoggingLevel.ORT_LOGGING_LEVEL_WARNING
   )
-  let stt = initSpeechToText("./models/ggml-base.en-q5_0.bin")
+  let stt = initSpeechToText("./models/ggml-base-q5_1.bin")
+  #let stt = initSpeechToText("./models/ggml-base.en-q5_0.bin")
   #let stt = initSpeechToText("./models/ggml-medium-q5_0.bin")
+  #let stt = initSpeechToText("./models/ggml-kotoba-whisper-bilingual-v1.0-q5_0.bin")
   let sttParams = initSttParams(
     #sttLangJa,
+    #sttLangEs,
     #translate = true,
     threads = 2,
     audioCtx = 768

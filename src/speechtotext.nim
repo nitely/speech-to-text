@@ -45,9 +45,10 @@ type
 
 const languageEn = "en"
 const languageJa = "ja"
+const languageEs = "es"
 
 type SttLang* = enum
-  sttLangEn, sttLangJa
+  sttLangEn, sttLangJa, sttLangEs
 
 proc initSttParams*(
   lang = sttLangEn,
@@ -66,6 +67,7 @@ proc initSttParams*(
   case lang
   of sttLangEn: wparams.language = languageEn
   of sttLangJa: wparams.language = languageJa
+  of sttLangEs: wparams.language = languageEs
   wparams.n_threads = threads.cint
   wparams.audio_ctx = audioCtx.cint
   SttParams(
