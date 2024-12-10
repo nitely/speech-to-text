@@ -1,6 +1,7 @@
 src/silerovad
 src/speechtotext
 src/miniaudio.out
+src/app
 samples/jfk3.wav
 samples/testja.wav
 samples/testja2.wav

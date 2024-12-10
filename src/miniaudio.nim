@@ -31,7 +31,7 @@ proc `=destroy`*(r: Recorder) =
   deinitCond(r.recCond)
   `=destroy`(r.buff)
 
-proc initRecorder: Recorder =
+proc initRecorder*: Recorder =
   result = Recorder(
     buffLock: default(Lock),
     buffCond: default(Cond),
@@ -59,7 +59,7 @@ proc captureCallback(
   var rec = cast[ptr Recorder](pDevice.pUserData)
   let input = cast[ptr UncheckedArray[float32]](pInput)
   withLock rec.buffLock:
-    if rec.buff.len > 1_000_000:
+    if rec.buff.len > 16000 * 60:
       echo "dropping samples"
       rec.buff.setLen 0
     let L = rec.buff.len
@@ -79,8 +79,23 @@ proc listen(rec: ptr Recorder) {.thread.} =
   deviceConfig.sampleRate = 16000
   deviceConfig.dataCallback = captureCallback
   deviceConfig.pUserData = rec
+
+  # XXX move to device selector prompt
+  var context: ma_context  #struct_ma_context_536871418
+  defer: discard ma_context_uninit(addr context)
+  doAssert ma_context_init(nil, 0, nil, addr context) == MA_SUCCESS
+  var captureDevices: ptr ma_device_info
+  var captureDeviceCount: uint32
+  doAssert ma_context_get_devices(addr context, nil, nil, addr captureDevices, addr captureDeviceCount) == MA_SUCCESS
+  let captureDeviceArray = cast[ptr UncheckedArray[ma_device_info]](captureDevices)
+  for iDevice in 0 ..< int(captureDeviceCount):
+    let deviceName = cast[cstring](addr captureDeviceArray[iDevice].name[0])
+    echo "  ", iDevice, ": ", $deviceName
+  # XXX pick the Monitor audio analog stereo
+  doAssert captureDeviceCount > 0
+
   # XXX fix works in my machine
-  deviceConfig.capture.pDeviceID = nil #addr captureDeviceArray[0].id
+  deviceConfig.capture.pDeviceID = addr captureDeviceArray[0].id
   if ma_device_init(nil, addr deviceConfig, addr device) != MA_SUCCESS:
     echo "Failed to initialize loopback device."
     return
@@ -104,23 +119,36 @@ proc stop(rec: var Recorder, worker: Worker) =
     rec.running = false
     rec.recCond.signal()
   joinThread(worker)
+  doAssert rec.running == false
 
-proc listen*(rec: var Recorder) =
+template with*(rec: var Recorder, body: untyped): untyped =
   var worker = default(Worker)
   rec.start(worker)
-  defer: rec.stop(worker)
+  try:
+    body
+  finally:
+    rec.stop(worker)
+
+proc listen*(rec: var Recorder, result: var seq[float32]) =
+  withLock rec.buffLock:
+    # XXX rec.buff.len < 16000 * n_seconds
+    #     but try 8000 it makes text appear sooner
+    while rec.buff.len < 16000:
+      rec.buffWait = true
+      rec.buffCond.wait(rec.buffLock)
+    result.add rec.buff
+    rec.buff.setLen 0
+
+proc listen(rec: var Recorder) =
   var buff = newSeq[float32]()
   while true:
-    withLock rec.buffLock:
-      while rec.buff.len == 0:
-        rec.buffWait = true
-        rec.buffCond.wait(rec.buffLock)
-      buff.setLen 0
-      buff.add rec.buff
-      rec.buff.setLen 0
+    buff.setLen 0
+    listen(rec, buff)
     echo "Samples consumed: ", $buff.len
     echo "Press Enter to continue..."
     discard stdin.readLine()
 
-var rec = initRecorder()
-listen(rec)
+when isMainModule:
+  var rec = initRecorder()
+  with rec:
+    listen(rec)
