@@ -1,6 +1,6 @@
 
+import pkg/silerovad
 import ./miniaudio
-import ./silerovad
 import ./speechtotext
 import ./utils
 

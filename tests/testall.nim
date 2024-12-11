@@ -1,5 +1,5 @@
 
-import ../src/silerovad
+import pkg/silerovad
 import ../src/speechtotext
 import ./utils
 

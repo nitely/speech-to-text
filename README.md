@@ -27,7 +27,6 @@ Unlicense. All rights reserved.
 
 ## Notes
 
-- [Static onnxruntime](https://github.com/csukuangfj/onnxruntime-libs/releases/tag/v1.20.1).
 - [Dynamic onnxruntime](https://github.com/microsoft/onnxruntime/releases/tag/v1.20.1)
 - Static libs/libwhisper.a is built with CPU support only. It requires OpenBlas with OpenMP support.
 - Go to [whisper.cpp](https://github.com/ggerganov/whisper.cpp) to build Whisper with CUDA support. I tried with Vulkan, but the generated text was bad.

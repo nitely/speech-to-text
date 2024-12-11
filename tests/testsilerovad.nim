@@ -1,5 +1,5 @@
 
-import ../src/silerovad
+import pkg/silerovad
 import ./utils
 
 test "Test jfk.wav":
