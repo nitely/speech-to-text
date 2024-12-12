@@ -32,7 +32,6 @@ proc main =
     while true:
       doAssert buff.len < 16000 * 60
       listen(rec, buff)
-      dtr.reset()
       let segments = dtr.detect(buff)
       if segments.len == 0:
         buff.setLen 0
